@@ -1,0 +1,20 @@
+# LangGraph Agentic Workflow Dependencies
+langgraph>=0.0.69
+langchain-core>=0.1.16
+langchain-mistralai>=0.0.3
+
+# Streamlit Frontend
+streamlit>=1.31.1
+
+# Database and Checkpointing
+sqlite3
+
+# Environment Variables
+python-dotenv>=1.0.0
+
+# Additional LangChain Dependencies
+langchain>=0.1.6
+
+# Utilities
+uuid
+typing-extensions>=4.5.0
