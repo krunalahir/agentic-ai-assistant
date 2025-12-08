@@ -7,14 +7,18 @@ langchain-mistralai>=0.0.3
 streamlit>=1.31.1
 
 # Database and Checkpointing
-sqlite3
+langgraph-checkpoint-sqlite
 
 # Environment Variables
 python-dotenv>=1.0.0
 
+# Tools
+duckduckgo-search
+
 # Additional LangChain Dependencies
 langchain>=0.1.6
+langchain-community>=0.0.1
 
 # Utilities
-uuid
 typing-extensions>=4.5.0
+requests
