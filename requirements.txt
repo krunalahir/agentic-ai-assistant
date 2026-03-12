@@ -3,7 +3,12 @@ langgraph>=0.0.69
 langchain-core>=0.1.16
 langchain-mistralai>=0.0.3
 
-# Streamlit Frontend
+# FastAPI Backend
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+python-multipart>=0.0.6
+
+# Streamlit Frontend (legacy)
 streamlit>=1.31.1
 
 # Database and Checkpointing
@@ -22,3 +27,10 @@ langchain-community>=0.0.1
 # Utilities
 typing-extensions>=4.5.0
 requests
+
+# RAG Dependencies
+PyPDF2>=3.0.0
+sentence-transformers>=2.2.0
+faiss-cpu>=1.7.4
+transformers>=4.30.0
+torch>=2.0.0

@@ -1,5 +1,11 @@
 import sqlite3
 import os
+import sys
+from pathlib import Path
+
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from typing import TypedDict, Annotated
 from langchain_core.messages import BaseMessage, HumanMessage
 from langgraph.graph import StateGraph, START, END
@@ -11,6 +17,7 @@ from langchain_mistralai.chat_models import ChatMistralAI
 from langgraph.checkpoint.sqlite import SqliteSaver
 import requests
 from dotenv import load_dotenv
+from rag.rag_tool import rag_search, initialize_rag_from_pdf, initialize_rag_from_saved, is_rag_ready
 
 # Load environment variables from .env file
 load_dotenv()
@@ -63,7 +70,7 @@ def get_stock_price(symbol:str)-> dict:
     r=requests.get(url)
     return r.json()
 
-tools=[search_tool,get_stock_price,calculator]
+tools=[search_tool,get_stock_price,calculator,rag_search]
 llm_with_tools=llm.bind_tools(tools)
 
 
@@ -75,7 +82,9 @@ def question_ans(state: ChatState):
 
 tool_node=ToolNode(tools)
 
-conn=sqlite3.connect(database="chat.db",check_same_thread=False)
+# Connect to database in data folder
+db_path = Path(__file__).parent.parent.parent / "data" / "chat.db"
+conn=sqlite3.connect(database=str(db_path),check_same_thread=False)
 checkpointer=SqliteSaver(conn=conn)
 
 graph=StateGraph(ChatState)

@@ -1,0 +1,202 @@
+# Python
+# =============================================================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Environments
+.env
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+# =============================================================================
+# PyCharm
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Spyder
+.spyderproject
+.spyproject
+
+# Eclipse
+.pydevproject
+.settings/
+
+# Mac OS
+# =============================================================================
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+# =============================================================================
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Data & Database Files
+# =============================================================================
+# SQLite databases
+*.db
+*.db-shm
+*.db-wal
+!data/.gitkeep
+
+# Vector stores
+*.pkl
+*.index
+!data/.gitkeep
+
+# Pickle files
+*.pickle
+
+# Logs
+# =============================================================================
+*.log
+logs/
+
+# Environment Variables
+# =============================================================================
+.env
+.env.local
+.env.*.local
+
+# API Keys (keep template, ignore actual file)
+config/.env
+!config/.env.example
+
+# Temporary Files
+# =============================================================================
+tmp/
+temp/
+*.tmp
+*.swp
+*.swo
+*~
+
+# Backup Files
+# =============================================================================
+*.bak
+*.backup
+*.old
+
+# Project Specific
+# =============================================================================
+# Junk files (from accidental pip installs)
+=1.*
+=2.*
+=3.*
+=4.*
+=5.*
+=6.*
+=7.*
+=8.*
+=9.*
+
+# Vector store files (regenerated)
+vector_store.pkl
+vector_store.index
+
+# RAG cache
+src/rag/__pycache__/
+src/backend/__pycache__/
+src/frontend/__pycache__/
+
+# Test files
+# =============================================================================
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Documentation
+# =============================================================================
+docs/_build/
+docs/.doctrees/
+
+# Large files (optional - uncomment if needed)
+# =============================================================================
+# *.pdf
+# *.zip
+# *.tar.gz
+# *.rar
+
+# Secrets
+# =============================================================================
+*.pem
+*.key
+*.crt
+secrets/
+
+# OS generated files
+# =============================================================================
+**/Thumbs.db
+**/.DS_Store
