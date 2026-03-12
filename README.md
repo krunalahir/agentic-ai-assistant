@@ -228,7 +228,7 @@ Agentic AI Assistant/
 ### Option 1: Using Run Script (Recommended)
 
 ```bash
-git clone https://github.com/yourusername/agentic-ai-assistant
+git clone  https://github.com/krunalahir/agentic-ai-assistant
 cd agentic-ai-assistant
 chmod +x run.sh
 ./run.sh
@@ -238,7 +238,7 @@ chmod +x run.sh
 
 **Terminal 1 - Start FastAPI Backend:**
 ```bash
-git clone https://github.com/yourusername/agentic-ai-assistant
+git clone  https://github.com/krunalahir/agentic-ai-assistant
 cd agentic-ai-assistant
 source .venv/bin/activate
 python src/backend/api.py
@@ -246,7 +246,7 @@ python src/backend/api.py
 
 **Terminal 2 - Start Streamlit Frontend:**
 ```bash
-git clone https://github.com/yourusername/agentic-ai-assistant
+git clone  https://github.com/krunalahir/agentic-ai-assistant
 cd agentic-ai-assistant
 source .venv/bin/activate
 streamlit run src/frontend/streamlit_fastapi.py
@@ -263,7 +263,7 @@ Open your browser: **http://localhost:8501**
 All dependencies are already installed. If you need to reinstall:
 
 ```bash
-git clone https://github.com/yourusername/agentic-ai-assistant
+git clone  https://github.com/krunalahir/agentic-ai-assistant
 cd agentic-ai-assistant
 source .venv/bin/activate
 pip install -r config/requirements.txt
