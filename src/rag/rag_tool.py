@@ -6,6 +6,10 @@ import os
 import sys
 from pathlib import Path
 
+# Add src/rag to Python path for imports
+rag_dir = Path(__file__).parent
+sys.path.insert(0, str(rag_dir))
+
 # Data folder for vector store
 data_dir = Path(__file__).parent.parent.parent / "data"
 vector_store_path = data_dir / "vector_store.pkl"
