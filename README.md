@@ -112,8 +112,7 @@ Agentic AI Assistant/
 │   │   │   ├── Conversation manager
 │   │   │   ├── RAG status indicator
 │   │   │   └── API integration (HTTP)
-│   │   │
-│   │   └── Streamlit_frontend_database.py # Legacy UI (optional)
+│   │  
 │   │
 │   └── 📂 rag/                            # RAG (Retrieval Augmented Generation)
 │       │
@@ -589,17 +588,6 @@ Full list in `config/requirements.txt`
 
 ---
 
-## 💡 Why Choose This Project?
-
-✅ **Production-Ready** - Professional architecture with clean separation of concerns  
-✅ **Feature-Rich** - Multiple AI tools in one unified interface  
-✅ **Well-Documented** - Comprehensive guides and examples  
-✅ **Easy to Extend** - Modular design makes adding new tools simple  
-✅ **Privacy-Focused** - All data stays on your machine  
-✅ **Cost-Effective** - Uses affordable Mistral AI API  
-✅ **Fast Performance** - Optimized vector search and caching  
-✅ **Beautiful UI** - Modern, intuitive interface  
-
 ---
 
 ## 📄 License
@@ -627,4 +615,3 @@ For issues, questions, or contributions, please refer to the project documentati
 
 **Built with ❤️ using LangGraph, FastAPI, and Streamlit**
 
-**🚀 Ready to transform how you interact with documents and information? Start chatting now!**

@@ -7,7 +7,6 @@
 │
 ├── 📄 README.md                          # Main project documentation
 ├── 🚀 run.sh                             # One-command startup script
-├── 📄 README_FASTAPI_STREAMLIT.md        # Architecture documentation
 │
 ├── 📂 src/                               # Source Code
 │   │
@@ -18,7 +17,6 @@
 │   │
 │   ├── 📂 frontend/                      # Frontend User Interface
 │   │   ├── streamlit_fastapi.py          # ✨ ACTIVE: Modern Streamlit UI
-│   │   ├── Streamlit_frontend_database.py # Legacy UI (optional)
 │   │   └── __init__.py                   # Python package marker
 │   │
 │   └── 📂 rag/                           # RAG (Retrieval Augmented Generation)
