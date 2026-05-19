@@ -39,29 +39,42 @@ The **Agentic AI Assistant** is an intelligent conversational AI system that goe
         ↓
 2. FastAPI backend receives the request
         ↓
-3. LangGraph AI Agent analyzes the question
+3. LangGraph Multi-Agent Supervisor analyzes the question
         ↓
-4. Agent decides which tool to use:
-   - Custom RAG System (for document questions)
-   - Web Search (for current information)
-   - Stock API (for financial data)
-   - Calculator (for math problems)
-   - Direct LLM response (for general knowledge)
+4. Supervisor routes to the specialized Worker Node:
+   - RAG Specialist: Document analysis & semantic search
+   - Researcher: Web search & real-time stock data
+   - Math Specialist: Basic arithmetic operations
+   - Code Specialist: Python execution & algorithmic logic ← NEW 🚀
         ↓
-5. Tool executes and returns results
+5. The Worker Node processes the request (often via a multi-turn reasoning loop)
         ↓
-6. AI Agent formulates a natural language response
+6. Worker sends a "REPORT" back to the Supervisor
         ↓
-7. Response displayed to user in the chat interface
+7. Supervisor validates the report and signals "FINISH"
+        ↓
+8. Final response with citations and formatting is delivered to the user
 ```
+
+### 🧠 Agentic Reasoning Loop (Example: Code Specialist)
+
+This project implements a sophisticated **Agentic Loop** that demonstrates true autonomous reasoning. When you ask a complex technical or logical question:
+
+1.  **Supervisor Node**: Analyzes the query and identifies it requires code execution. It delegates the task to the **CodeSpecialist**.
+2.  **CodeSpecialist Node**: Acts as a Senior Developer. It writes a complete, logical Python script to solve the problem.
+3.  **Tool Node (Python REPL)**: Executes the generated script in a sandboxed environment and captures the real-world output.
+4.  **CodeSpecialist Node (Verification)**: Receives the output. If the code failed, it debugs and retries. If it succeeded, it formats the result for the user.
+5.  **Supervisor Node (Final Review)**: Confirms the specialist has completed the task and delivers the final answer.
 
 ### Key Technologies
 
-- **LangGraph** - Orchestrates multiple AI agents and tools
-- **Mistral AI** - Large Language Model for understanding and generating responses
-- **FAISS** - Facebook AI Similarity Search for fast document retrieval
-- **FastAPI** - High-performance REST API backend
-- **Streamlit** - Beautiful, interactive web interface
+- **LangGraph** - Orchestrates multiple AI agents and tools via a stateful graph
+- **Mistral AI** - High-performance LLM for reasoning and generation
+- **FAISS** - Facebook AI Similarity Search for dense vector retrieval
+- **Sentence Transformers** - Local embedding models (all-MiniLM-L6-v2)
+- **Ragas** - Framework for automated evaluation of RAG pipelines
+- **FastAPI** - Async REST API backend
+- **Streamlit** - Modern web interface
 - **SQLite** - Persistent conversation storage
 
 ---
@@ -74,138 +87,81 @@ The **Agentic AI Assistant** is an intelligent conversational AI system that goe
 Agentic AI Assistant/
 │
 ├── 📄 .gitignore                          # Git ignore rules
-├── 📄 .gitkeep                            # Keep data directory
-├── 📄 README.md                           # Main documentation (this file)
 ├── 📄 PROJECT_STRUCTURE.md                # Directory structure guide
+├── 📄 README.md                           # Main documentation (this file)
+├── 📄 requirements.txt                    # 📦 Python dependencies
 ├── 🚀 run.sh                              # One-command startup script
+├── 📄 rag_logs.txt                        # RAG execution logs
 │
 ├── 📂 src/                                # SOURCE CODE
 │   │
 │   ├── 📂 backend/                        # Backend API Server
 │   │   ├── __init__.py                    # Python package marker
 │   │   ├── api.py                         # ⭐ FastAPI REST API endpoints
-│   │   │   ├── POST /api/thread           # Create new chat thread
-│   │   │   ├── GET /api/thread            # Get all conversations
-│   │   │   ├── GET /api/thread/{id}       # Get thread messages
-│   │   │   ├── POST /api/chat             # Send message & get response
-│   │   │   ├── GET /api/rag/status        # Check RAG status
-│   │   │   └── POST /api/rag/upload       # Upload PDF document
-│   │   │
-│   │   └── langraph_database.py           # ⭐ LangGraph Workflow
-│   │       ├── ChatState                  # Message state management
-│   │       ├── llm (Mistral AI)           # Language model binding
-│   │       ├── Tools:                     # AI Tools
-│   │       │   ├── DuckDuckGoSearchRun    # Web search tool
-│   │       │   ├── get_stock_price        # Stock price fetcher
-│   │       │   ├── calculator             # Math operations
-│   │       │   └── rag_search             # Document search
-│   │       ├── question_ans node          # AI response generation
-│   │       ├── tools node                 # Tool execution
-│   │       └── workflow.compile()         # Graph compilation
+│   │   └── langraph_database.py           # ⭐ LangGraph Multi-Agent Workflow
 │   │
 │   ├── 📂 frontend/                       # Frontend User Interface
 │   │   ├── __init__.py                    # Python package marker
-│   │   ├── streamlit_fastapi.py           # ⭐ ACTIVE: Modern Streamlit UI
-│   │   │   ├── Sidebar components
-│   │   │   ├── Chat interface
-│   │   │   ├── File upload handler
-│   │   │   ├── Conversation manager
-│   │   │   ├── RAG status indicator
-│   │   │   └── API integration (HTTP)
-│   │  
+│   │   └── streamlit_fastapi.py           # ⭐ ACTIVE: Modern Streamlit UI
 │   │
-│   └── 📂 rag/                            # RAG (Retrieval Augmented Generation)
-│       │
+│   └── 📂 rag/                            # AGENTIC RAG SYSTEM
 │       ├── __init__.py                    # Python package marker
-│       ├── rag_tool.py                    # ⭐ RAG Pipeline Manager
-│       │   ├── RAGSystem class
-│       │   ├── Document loading
-│       │   ├── Chunking
-│       │   ├── Embedding
-│       │   ├── Vector storage
-│       │   ├── Retrieval
-│       │   ├── Re-ranking
-│       │   └── Response generation
+│       ├── rag_tool.py                    # ⭐ RAG Pipeline Manager & Tool
 │       │
-│       ├── setup_rag.py                   # RAG initialization script
-│       ├── main.py                        # RAG main entry point
+│       ├── 📂 agent/                      # 🤖 RAG Brain
+│       │   └── rag_agent.py               # Agentic logic (Self-correction)
 │       │
 │       ├── 📂 Document_Loader/            # Document Processing
-│       │   ├── __init__.py
-│       │   ├── base.py                    # Base loader class
 │       │   ├── pdf_loader.py              # ⭐ PDF document loader
 │       │   └── txt_loader.py              # Text file loader
 │       │
 │       ├── 📂 Chunking/                   # Text Chunking
-│       │   ├── __init__.py
-│       │   ├── base.py                    # Base chunker class
-│       │   └── simple_chunker.py          # ⭐ Simple text chunker
+│       │   ├── semantic_chunker.py        # ⭐ AI-powered semantic splitting
+│       │   └── simple_chunker.py          # Standard text chunker
 │       │
 │       ├── 📂 Embedding/                  # Text Embeddings
-│       │   ├── __init__.py
-│       │   ├── base.py                    # Base embedder class
-│       │   └── sentence_transformer.py    # ⭐ Sentence embeddings
+│       │   └── sentence_transformer.py    # ⭐ Local sentence embeddings
 │       │
 │       ├── 📂 vector_store/               # Vector Storage
-│       │   ├── __init__.py
-│       │   ├── base.py                    # Base vector store class
 │       │   └── faiss_store.py             # ⭐ FAISS vector store
 │       │
 │       ├── 📂 Retriever/                  # Document Retrieval
-│       │   ├── __init__.py
-│       │   └── retriever.py               # ⭐ Similarity search
+│       │   ├── bm25_retriever.py          # Keyword-based search
+│       │   └── retriever.py               # ⭐ Vector-based search
 │       │
 │       ├── 📂 Re_Ranker/                  # Result Re-ranking
-│       │   ├── __init__.py
 │       │   └── Ranker.py                  # ⭐ Cross-encoder re-ranker
 │       │
-│       └── 📂 generator/                  # Response Generation
-│           ├── __init__.py
-│           └── llm.py                     # ⭐ LLM response generator
+│       ├── 📂 evaluation/                 # Quality Assurance
+│       │   └── ragas_eval.py              # ⭐ RAGAS evaluation
+│       │
+│       └── 📂 utils/                      # Helper Modules
+│           ├── logger.py                  # RAG-specific logging
+│           └── memory.py                  # RAG context memory
 │
 ├── 📂 config/                             # CONFIGURATION
-│   ├── .env                               # 🔐 Environment variables (API keys)
-│   ├── .env.example                       # Template for .env
-│   └── requirements.txt                   # 📦 Python dependencies
-│       ├── FastAPI
-│       ├── Streamlit
-│       ├── LangGraph
-│       ├── LangChain
-│       ├── sentence-transformers
-│       ├── faiss-cpu
-│       ├── PyPDF2
-│       └── torch
+│   └── .env.example                       # Template for .env
 │
 ├── 📂 data/                               # DATA STORAGE
-│   ├── .gitkeep                           # Keep directory in Git
 │   ├── chat.db                            # 💾 SQLite conversation database
-│   ├── chat.db-shm                        # Database shared memory
-│   ├── chat.db-wal                        # Database write-ahead log
-│   ├── vector_store.pkl                   # 🧠 FAISS vector store (embeddings)
-│   └── vector_store.index                 # Vector index file
+│   └── 📂 vector_store/                   # FAISS vector store folder
+│       └── index.faiss                    # Vector index file
 │
 ├── 📂 docs/                               # DOCUMENTATION
-│   ├── README.md                          # Project documentation
 │   └── RAG_USAGE.md                       # RAG system usage guide
 │
 └── 📂 .venv/                              # 🐍 Python Virtual Environment
-    ├── bin/                               # Executables (python, pip, streamlit)
-    ├── lib/python3.13/site-packages/      # Installed packages
-    └── ...
 ```
 
 ### File Count Summary
 
-| Directory | Python Files | Purpose |
-|-----------|-------------|---------|
-| **src/backend/** | 2 | FastAPI API + LangGraph workflow |
-| **src/frontend/** | 2 | Streamlit UI (1 active, 1 legacy) |
-| **src/rag/** | 23 | Complete RAG pipeline |
-| **config/** | 0 | Configuration files |
-| **data/** | 0 | Database & vector stores |
-| **docs/** | 0 | Documentation |
-| **Root** | 1 | Startup script |
-| **TOTAL** | **28** | **Production-ready codebase** |
+| Directory | Purpose |
+|-----------|---------|
+| **src/backend/** | FastAPI API + LangGraph Multi-Agent workflow |
+| **src/frontend/** | Streamlit UI |
+| **src/rag/** | Complete Agentic RAG pipeline |
+| **data/** | Database & FAISS vector stores |
+| **Root** | Configuration & Startup scripts |
 
 ### RAG Module Breakdown
 
@@ -330,14 +286,15 @@ ALPHA_VANTAGE_API_KEY=your_alpha_vantage_key_here
 
 | Feature | Description | Example |
 |---------|-------------|---------|
-| 📄 **Document Q&A** | Upload PDFs and ask questions using RAG technology | "What does the document say about climate change?" |
-| 🌐 **Web Search** | Search the internet for real-time information | "Search for latest AI breakthroughs" |
-| 📈 **Stock Prices** | Get live stock market data | "Get AAPL, TSLA, GOOGL stock prices" |
-| 🧮 **Calculator** | Perform mathematical calculations | "Calculate 125 × 47 + 300" |
-| 💬 **General Chat** | Answer questions using AI knowledge | "Explain quantum computing" |
+| 📄 **Document Q&A** | High-precision RAG with self-correction and re-ranking | "What are the core risks listed in the PDF?" |
+| 💻 **Code Specialist** | **Agentic execution** of Python scripts for data & logic | "Graph the Fibonacci sequence up to 10" |
+| 🌐 **Web Search** | Real-time internet browsing for latest facts | "Search for latest AI breakthroughs" |
+| 📈 **Stock Prices** | Live financial data fetching via API | "Get AAPL, TSLA stock prices" |
+| 🧮 **Calculator** | Specialized worker for precise arithmetic | "Calculate 125 × 47 + 300" |
 
 ### 💬 Chat Features
 
+- ✅ **Multi-Agent Orchestration** - Intelligent routing between specialized Worker Nodes
 - ✅ **Multi-thread conversations** - Manage multiple chat sessions simultaneously
 - ✅ **Conversation history** - All chats are saved and can be resumed
 - ✅ **Easy chat switching** - Jump between conversations instantly

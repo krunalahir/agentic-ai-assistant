@@ -5,7 +5,7 @@ class ReRanker:
         self.model = CrossEncoder(model_name)
 
     def rerank(self,query,candidate_chunks,top_k=3):
-        pairs=[(query,chunk) for chunk in candidate_chunks]
+        pairs = [(query, chunk["text"]) for chunk in candidate_chunks]
         scores=self.model.predict(pairs)
 
         ranked=sorted(
@@ -14,4 +14,4 @@ class ReRanker:
             reverse=True
         )
 
-        return [text for text,_ in ranked[:top_k]]
+        return [chunk for chunk,_ in ranked[:top_k]]

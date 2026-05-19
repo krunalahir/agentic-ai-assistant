@@ -1,0 +1,53 @@
+2026-04-23 21:23:36,963 - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-23 21:42:29,827 - INFO - AGENT_LOOP:Attempt 1 for query: content of the uploaded document
+2026-04-23 21:42:30,703 - INFO - AGENT_RETRIEVAL:Using strategy: keyword for query: content of the uploaded document
+2026-04-23 21:42:35,628 - INFO - PERFORMANCE:{'latency': 2.90558123588562, 'tokens': 146, 'tps': 50.24812185486848}
+2026-04-23 21:52:02,167 - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-23 21:56:25,360 - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-23 21:57:36,001 - INFO - AGENT_LOOP:Attempt 1 for query: main topics discussed in the uploaded document
+2026-04-23 21:57:36,772 - INFO - AGENT_RETRIEVAL:Using strategy: hybrid for query: main topics discussed in the uploaded document
+2026-04-23 21:57:40,490 - INFO - PERFORMANCE:{'latency': 1.4970989227294922, 'tokens': 50, 'tps': 33.39792664391249}
+2026-04-23 22:04:50,660 - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-23 22:25:02,169 - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-23 23:00:08,280 - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-23 23:17:52,943 - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-23 23:25:55,195 - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-23 23:28:08,689 - INFO - AGENT_LOOP:Attempt 1 for query: solutions or methods to reduce overfitting
+2026-04-23 23:28:08,689 - INFO - AGENT_LOOP:Attempt 1 for query: reasons for overfitting in machine learning models
+2026-04-23 23:28:08,689 - INFO - AGENT_LOOP:Attempt 1 for query: does reducing model complexity reduce overfitting
+2026-04-23 23:28:09,505 - INFO - AGENT_RETRIEVAL:Using strategy: hybrid for query: reasons for overfitting in machine learning models
+2026-04-23 23:28:09,507 - INFO - AGENT_RETRIEVAL:Using strategy: hybrid for query: solutions or methods to reduce overfitting
+2026-04-23 23:28:09,507 - INFO - AGENT_RETRIEVAL:Using strategy: hybrid for query: does reducing model complexity reduce overfitting
+2026-04-23 23:28:13,633 - INFO - PERFORMANCE:{'latency': 0.8585457801818848, 'tokens': 9, 'tps': 10.482842275566634}
+2026-04-23 23:28:14,107 - INFO - PERFORMANCE:{'latency': 1.264146327972412, 'tokens': 53, 'tps': 41.92552620471373}
+2026-04-23 23:28:14,944 - INFO - PERFORMANCE:{'latency': 2.040440082550049, 'tokens': 150, 'tps': 73.51355292557126}
+2026-04-23 23:28:36,644 - INFO - AGENT_LOOP:Attempt 1 for query: reasons behind overfitting
+2026-04-23 23:28:36,651 - INFO - AGENT_LOOP:Attempt 1 for query: how to solve overfitting
+2026-04-23 23:28:36,653 - INFO - AGENT_LOOP:Attempt 1 for query: does reducing model complexity reduce overfitting
+2026-04-23 23:28:37,665 - INFO - AGENT_RETRIEVAL:Using strategy: hybrid for query: how to solve overfitting
+2026-04-23 23:28:37,676 - INFO - AGENT_RETRIEVAL:Using strategy: hybrid for query: does reducing model complexity reduce overfitting
+2026-04-23 23:28:37,682 - INFO - AGENT_RETRIEVAL:Using strategy: hybrid for query: reasons behind overfitting
+2026-04-23 23:28:41,587 - INFO - PERFORMANCE:{'latency': 0.9412031173706055, 'tokens': 9, 'tps': 9.56222927219246}
+2026-04-23 23:28:42,075 - INFO - PERFORMANCE:{'latency': 1.23110032081604, 'tokens': 71, 'tps': 57.671985620909716}
+2026-04-23 23:28:42,272 - INFO - PERFORMANCE:{'latency': 1.294753074645996, 'tokens': 44, 'tps': 33.98331377743994}
+2026-04-24 23:20:04,386 - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-24 23:34:08,465 - INFO - AGENT_LOOP:Attempt 1 for query: How does overfitting occur?
+2026-04-24 23:34:08,465 - INFO - AGENT_LOOP:Attempt 1 for query: How to overcome overfitting?
+2026-04-24 23:34:08,465 - INFO - AGENT_LOOP:Attempt 1 for query: What is overfitting?
+2026-04-24 23:34:09,282 - INFO - AGENT_RETRIEVAL:Using strategy: hybrid for query: How to overcome overfitting?
+2026-04-24 23:34:09,283 - INFO - AGENT_RETRIEVAL:Using strategy: keyword for query: What is overfitting?
+2026-04-24 23:34:09,399 - INFO - AGENT_RETRIEVAL:Using strategy: hybrid for query: How does overfitting occur?
+2026-04-24 23:34:13,153 - INFO - PERFORMANCE:{'latency': 1.298187017440796, 'tokens': 33, 'tps': 25.420066259062686}
+2026-04-24 23:34:13,255 - INFO - PERFORMANCE:{'latency': 1.1981370449066162, 'tokens': 55, 'tps': 45.904598504661664}
+2026-04-24 23:34:14,277 - INFO - PERFORMANCE:{'latency': 3.5617010593414307, 'tokens': 64, 'tps': 17.968942068325575}
+2026-04-24 23:40:24,576 - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-25 14:28:53,606 - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-27 23:56:50,430 - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-28 00:08:15,017 - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-28 00:37:01,879 - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-28 00:51:23,305 - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-28 00:54:45,004 - INFO - AGENT_LOOP:Attempt 1 for query: What is overfitting, why does it occur, and how to prevent it?
+2026-04-28 00:54:45,718 - INFO - AGENT_RETRIEVAL:Using strategy: hybrid for query: What is overfitting, why does it occur, and how to prevent it?
+2026-04-28 00:54:48,892 - INFO - PERFORMANCE:{'latency': 1.5375871658325195, 'tokens': 83, 'tps': 53.98067949862214}
+2026-04-30 10:34:15,666 - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-30 18:58:23,467 - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.

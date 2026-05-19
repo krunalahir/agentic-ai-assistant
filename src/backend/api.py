@@ -17,7 +17,7 @@ from typing import List, Optional
 from pydantic import BaseModel
 from backend.langraph_database import workflow, retrive_all_thread
 from langchain_core.messages import BaseMessage, HumanMessage
-from rag.rag_tool import get_rag_system, is_rag_ready
+from rag.rag_tool import get_rag_system, is_rag_ready, initialize_rag_from_saved
 import asyncio
 from dotenv import load_dotenv
 
@@ -38,6 +38,10 @@ app.add_middleware(
 
 # Vector store path in data folder
 VECTOR_STORE_PATH = str(Path(__file__).parent.parent.parent / "data" / "vector_store")
+
+# Initialize RAG system from saved state if it exists
+if os.path.exists(VECTOR_STORE_PATH):
+    initialize_rag_from_saved(VECTOR_STORE_PATH)
 
 
 class ChatRequest(BaseModel):
@@ -120,20 +124,26 @@ async def chat(request: ChatRequest):
     try:
         CONFIG = {'configurable': {'thread_id': request.thread_id}}
         
-        # Stream AI response
-        response_chunks = []
-        for message_chunks, metadata in workflow.stream(
+        # Use invoke instead of stream for more reliable response capturing
+        result = workflow.invoke(
             {'messages': [HumanMessage(content=request.message)]},
-            config=CONFIG,
-            stream_mode='messages'
-        ):
-            if hasattr(message_chunks, 'content'):
-                response_chunks.append(message_chunks.content)
+            config=CONFIG
+        )
         
-        ai_response = "".join(response_chunks)
+        # The last message should be the AI's response
+        messages = result.get('messages', [])
+        ai_response = "I couldn't generate a response. Please try again."
+        
+        if messages:
+            last_msg = messages[-1]
+            if hasattr(last_msg, 'content'):
+                ai_response = last_msg.content
+            else:
+                ai_response = str(last_msg)
         
         return ChatResponse(response=ai_response, thread_id=request.thread_id)
     except Exception as e:
+        print(f"Error in /api/chat: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -177,35 +187,23 @@ async def upload_document(file: UploadFile = File(...)):
 
 
 def get_thread_summary(thread_id: str) -> str:
-    """Generate a meaningful summary from the conversation"""
+    """Generate a quick summary from the conversation without LLM overhead"""
     try:
-        messages = workflow.get_state(config={'configurable': {'thread_id': thread_id}}).values['messages']
+        state = workflow.get_state(config={'configurable': {'thread_id': thread_id}})
+        messages = state.values.get('messages', [])
         if messages:
             # Find the first user message
             for message in messages:
                 if isinstance(message, HumanMessage):
                     content = message.content if hasattr(message, 'content') else str(message)
-                    # Use LLM to generate a meaningful summary
-                    from langchain_mistralai.chat_models import ChatMistralAI
-                    llm = ChatMistralAI(model="mistral-small-latest", api_key=os.getenv("MISTRAL_API_KEY"))
-                    prompt = f"Create a concise 2-3 word title for this conversation topic: '{content}'. Return only the title, no quotes or explanation."
-                    response = llm.invoke(prompt)
-                    summary = response.content.strip().strip('"').strip("'")
-                    # Limit to 3 words max
-                    words = summary.split()[:3]
-                    return ' '.join(words)
+                    # Simple first 3-4 words for the sidebar
+                    words = content.split()
+                    summary = " ".join(words[:4])
+                    if len(words) > 4:
+                        summary += "..."
+                    return summary
         return "New Chat"
     except Exception as e:
-        try:
-            messages = workflow.get_state(config={'configurable': {'thread_id': thread_id}}).values['messages']
-            if messages:
-                for message in messages:
-                    if isinstance(message, HumanMessage):
-                        content = message.content if hasattr(message, 'content') else str(message)
-                        words = content.split()[:3]
-                        return ' '.join(words) + ('...' if len(content.split()) > 3 else '')
-        except:
-            pass
         return "New Chat"
 
 

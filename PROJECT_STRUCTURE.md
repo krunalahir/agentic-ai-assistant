@@ -1,166 +1,131 @@
-# 📁 Project Directory Structure
+# 📁 Project Directory Structure - Agentic AI Assistant
 
-## Clean Organized Structure
+## 🚀 Clean Organized Structure
 
 ```
   Agentic AI Assistant/
 │
-├── 📄 README.md                          # Main project documentation
+├── 📄 .gitignore                          # Git ignore rules
+├── 📄 PROJECT_STRUCTURE.md                # ✨ THIS FILE: Directory guide
+├── 📄 README.md                           # Main project documentation
+├── 📄 requirements.txt                    # 📦 Python dependencies
 ├── 🚀 run.sh                             # One-command startup script
+├── 📄 rag_logs.txt                        # 📝 RAG execution logs
+├── 📄 test_mistral.py                     # 🧪 Mistral API connection test
 │
-├── 📂 src/                               # Source Code
+├── 📂 src/                               # 💻 SOURCE CODE
 │   │
-│   ├── 📂 backend/                       # Backend API Server
+│   ├── 📂 backend/                       # ⚙️ Backend API Server
+│   │   ├── __init__.py                   # Python package marker
 │   │   ├── api.py                        # FastAPI REST API endpoints
-│   │   ├── langraph_database.py          # LangGraph workflow & AI tools
-│   │   └── __init__.py                   # Python package marker
+│   │   └── langraph_database.py          # LangGraph Multi-Agent Workflow
 │   │
-│   ├── 📂 frontend/                      # Frontend User Interface
-│   │   ├── streamlit_fastapi.py          # ✨ ACTIVE: Modern Streamlit UI
-│   │   └── __init__.py                   # Python package marker
+│   ├── 📂 frontend/                      # 🎨 Frontend User Interface
+│   │   ├── __init__.py                   # Python package marker
+│   │   └── streamlit_fastapi.py          # Modern Streamlit UI
 │   │
-│   └── 📂 rag/                           # RAG (Retrieval Augmented Generation)
-│       ├── rag_tool.py                   # RAG pipeline manager
-│       ├── setup_rag.py                  # RAG initialization script
-│       ├── main.py                       # RAG main entry point
+│   └── 📂 rag/                           # 🧠 AGENTIC RAG SYSTEM
 │       ├── __init__.py                   # Python package marker
+│       ├── rag_tool.py                   # RAG pipeline manager & LangChain tool
 │       │
-│       ├── 📂 Document_Loader/           # Document processing
-│       ├── 📂 Chunking/                  # Text chunking
-│       ├── 📂 Embedding/                 # Text embeddings
-│       ├── 📂 vector_store/              # Vector storage
-│       ├── 📂 Retriever/                 # Document retrieval
-│       ├── 📂 Re_Ranker/                 # Re-ranking results
-│       └── 📂 generator/                 # Response generation
+│       ├── 📂 agent/                     # 🤖 RAG Brain
+│       │   └── rag_agent.py               # Agentic RAG logic (Self-correction, Adaptive)
+│       │
+│       ├── 📂 Chunking/                  # ✂️ Text Segmentation
+│       │   ├── base.py                   # Abstract base class
+│       │   ├── semantic_chunker.py       # AI-powered semantic splitting
+│       │   └── simple_chunker.py         # Standard character-based splitting
+│       │
+│       ├── 📂 Document_Loader/           # 📥 Data Ingestion
+│       │   ├── base.py                   # Abstract base class
+│       │   ├── pdf_loader.py              # PDF parsing logic
+│       │   └── txt_loader.py              # Text file parsing
+│       │
+│       ├── 📂 Embedding/                 # 🔢 Vectorization
+│       │   ├── base.py                   # Abstract base class
+│       │   └── sentence_transformer.py    # Local embedding models
+│       │
+│       ├── 📂 vector_store/              # 💾 Vector Database
+│       │   ├── base.py                   # Abstract base class
+│       │   └── faiss_store.py             # FAISS implementation
+│       │
+│       ├── 📂 Retriever/                 # 🔍 Search Engine
+│       │   ├── bm25_retriever.py         # Keyword-based search
+│       │   └── retriever.py               # Vector-based search
+│       │
+│       ├── 📂 Re_Ranker/                 # 🔝 Result Optimization
+│       │   └── Ranker.py                  # Cross-encoder re-ranking
+│       │
+│       ├── 📂 generator/                 # ✍️ Response Generation
+│       │   └── llm.py                     # LLM prompt engineering & generation
+│       │
+│       ├── 📂 evaluation/                # 📊 Quality Assurance
+│       │   └── ragas_eval.py              # RAGAS evaluation framework
+│       │
+│       ├── 📂 experiments/               # 🧪 R&D
+│       │   ├── questions.json            # Test dataset
+│       │   ├── reranker_ablation.py      # Re-ranker impact analysis
+│       │   └── retrieval_ablation.py     # Retrieval strategy analysis
+│       │
+│       └── 📂 utils/                      # 🛠️ Helper Modules
+│           ├── logger.py                 # RAG-specific logging
+│           ├── memory.py                 # RAG context memory
+│           └── tracer.py                 # Execution tracing
 │
-├── 📂 config/                            # Configuration Files
-│   ├── .env                              # 🔐 Environment variables (API keys)
-│   └── requirements.txt                  # 📦 Python dependencies
+├── 📂 config/                            # 🔧 Configuration
+│   └── .env.example                      # Template for environment variables
 │
-├── 📂 data/                              # Data Storage
-│   ├── chat.db                           # 💾 SQLite conversation database
-│   ├── chat.db-shm                       # Database shared memory file
-│   ├── chat.db-wal                       # Database write-ahead log
-│   ├── vector_store.pkl                  # 🧠 FAISS vector store (embeddings)
-│   └── vector_store.index                # Vector index file
+├── 📂 data/                              # 💾 Persistent Storage
+│   ├── chat.db                           # SQLite conversation history
+│   └── 📂 vector_store/                  # FAISS index files
+│       └── index.faiss                   # The actual vector database
 │
-├── 📂 docs/                              # Documentation
-│   ├── README.md                         # This file
-│   └── RAG_USAGE.md                      # RAG system usage guide
+├── 📂 docs/                              # 📚 Documentation
+│   └── RAG_USAGE.md                      # Detailed RAG system guide
 │
 └── 📂 .venv/                             # 🐍 Python Virtual Environment
-    ├── bin/                              # Executables
-    ├── lib/                              # Libraries
-    └── ...
 ```
 
 ---
 
-## 📊 File Overview Table
+## 📊 Component Overview
 
-| File/Folder | Type | Purpose | Status |
-|-------------|------|---------|--------|
-| **src/backend/api.py** | Python | FastAPI REST API server | ✅ Active |
-| **src/backend/langraph_database.py** | Python | LangGraph workflow definition | ✅ Active |
-| **src/frontend/streamlit_fastapi.py** | Python | Modern Streamlit UI | ✅ Active |
-| **src/rag/rag_tool.py** | Python | RAG system manager | ✅ Active |
-| **src/rag/setup_rag.py** | Python | RAG setup script | ✅ Active |
-| **config/.env** | Env | API keys & secrets | ✅ Required |
-| **config/requirements.txt** | Text | Python dependencies | ✅ Required |
-| **data/chat.db** | Database | Conversation storage | ✅ Auto-generated |
-| **data/vector_store.pkl** | Data | Document embeddings | ✅ Auto-generated |
-| **run.sh** | Shell | One-command startup | ✅ Active |
-| **README.md** | Markdown | Main documentation | ✅ Active |
+| Component | Path | Responsibility |
+|-----------|------|----------------|
+| **API Server** | `src/backend/api.py` | Handles HTTP requests from frontend |
+| **Orchestrator** | `src/backend/langraph_database.py` | Multi-agent supervisor (LangGraph) |
+| **Web UI** | `src/frontend/streamlit_fastapi.py` | User-friendly chat interface |
+| **RAG Manager** | `src/rag/rag_tool.py` | Bridges RAG system to LangChain/LangGraph |
+| **RAG Agent** | `src/rag/agent/rag_agent.py` | **Agentic Logic**: Adaptive retrieval & self-correction |
+| **Vector Store** | `src/rag/vector_store/` | Manages document embeddings (FAISS) |
+| **Retriever** | `src/rag/Retriever/` | Hybrid search (Vector + BM25) |
+| **Re-Ranker** | `src/rag/Re_Ranker/` | High-precision context filtering |
 
 ---
 
-## 🎯 Key Directories Explained
+## 🎯 Agentic RAG Features
 
-### `/src/backend/` - Server Side
-Contains the FastAPI server that handles all API requests:
-- REST endpoints for chat, threads, and RAG
-- LangGraph workflow with AI tools
-- Database connections
+Unlike traditional RAG, this "Agentic" version includes:
 
-### `/src/frontend/` - User Interface
-Contains the Streamlit web UI:
-- Chat interface
-- File upload
-- Conversation management
-- Connects to backend via HTTP
-
-### `/src/rag/` - RAG System
-Document processing and retrieval:
-- PDF loading and parsing
-- Text chunking and embedding
-- Vector storage and search
-- Result re-ranking
-
-### `/config/` - Configuration
-Settings and environment:
-- API keys (MISTRAL, ALPHA_VANTAGE)
-- Python package dependencies
-
-### `/data/` - Storage
-Persistent data files:
-- Conversation history (SQLite)
-- Vector embeddings (FAISS)
-
-### `/docs/` - Documentation
-Project documentation and guides
+1.  **Adaptive Retrieval**: Dynamically chooses between keyword (BM25), vector, or hybrid search based on the query.
+2.  **Self-Correction**: Evaluates the relevance of retrieved context and rewrites queries if results are insufficient.
+3.  **Semantic Chunking**: Uses AI to split documents at logical topic transitions rather than fixed character counts.
+4.  **Multi-Agent Coordination**: The RAG system is a specialized worker managed by a Supervisor agent.
 
 ---
 
 ## 🚀 How to Run
 
-### Quick Start (Recommended)
-```bash
-./run.sh
-```
-
-### Manual Start
-```bash
-# Terminal 1 - Backend
-python src/backend/api.py
-
-# Terminal 2 - Frontend  
-streamlit run src/frontend/streamlit_fastapi.py
-```
-
-### Access
-- **Frontend:** http://localhost:8501
-- **Backend API:** http://localhost:8000
+1.  **Setup Environment**:
+    ```bash
+    cp config/.env.example .env
+    # Add your MISTRAL_API_KEY and ALPHA_VANTAGE_API_KEY
+    ```
+2.  **Run Application**:
+    ```bash
+    ./run.sh
+    ```
 
 ---
 
-## 📝 Notes
-
-- ✅ **Organized**: Clean separation of concerns
-- ✅ **Modular**: Easy to maintain and extend
-- ✅ **Scalable**: Can scale backend/frontend independently
-- ✅ **Documented**: Comprehensive documentation
-- ✅ **Ready**: All dependencies installed
-
----
-
-## 🎨 Architecture Flow
-
-```
-User Browser (8501)
-    ↓
-Streamlit Frontend
-    ↓ HTTP REST API
-FastAPI Backend (8000)
-    ↓
-LangGraph Workflow
-    ↓
-┌───────────┬────────────┬──────────┐
-│   RAG     │   Tools    │ Database │
-│  System   │ (Search,   │  (SQLite)│
-│           │ Calc, etc) │          │
-└───────────┴────────────┴──────────┘
-```
-
----
-
-**✨ This structure provides a professional, production-ready organization!**
+**✨ This structure represents a modern, modular, and agent-centric AI architecture.**

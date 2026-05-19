@@ -8,6 +8,7 @@ class SimpleChunker(BaseChunker):
 
     def chunk(self,documents):
         chunks=[]
+        chunk_id=1
 
         for doc in documents:
             start=0
@@ -18,8 +19,12 @@ class SimpleChunker(BaseChunker):
                 chunk=doc[start:end]
 
                 chunk=" ".join(chunk.split())
-                chunks.append(chunk)
+                chunks.append({
+                    "id":chunk_id,
+                    "text":chunk
+                })
 
+                chunk_id=chunk_id+1
                 start=end-self.overlap
 
         return chunks

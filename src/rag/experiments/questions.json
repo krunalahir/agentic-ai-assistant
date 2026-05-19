@@ -1,0 +1,12 @@
+[
+  "Why do deep learning models tend to overfit, and what techniques are used to prevent it?",
+  "Explain how backpropagation works in training neural networks.",
+  "What is the difference between training loss and validation loss, and why is it important?",
+  "Why is dropout used in neural networks, and how does it affect model performance?",
+  "How does model capacity relate to overfitting and underfitting?",
+  "What is the role of activation functions in neural networks, and why are non-linear functions needed?",
+  "Why can a model perform well on training data but poorly on unseen data?",
+  "What is gradient descent and how does it help in optimizing neural networks?",
+  "Why are deep neural networks considered more powerful than shallow networks?",
+  "What are the key steps involved in training a deep learning model?"
+]

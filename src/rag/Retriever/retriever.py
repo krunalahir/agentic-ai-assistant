@@ -1,5 +1,9 @@
-from Embedding.sentence_transformer import SentenceTransformerEmbedder
-from vector_store.faiss_store import FaissVectorStore
+try:
+    from Embedding.sentence_transformer import SentenceTransformerEmbedder
+    from vector_store.faiss_store import FaissVectorStore
+except ImportError:
+    from rag.Embedding.sentence_transformer import SentenceTransformerEmbedder
+    from rag.vector_store.faiss_store import FaissVectorStore
 
 class Retriever:
 
