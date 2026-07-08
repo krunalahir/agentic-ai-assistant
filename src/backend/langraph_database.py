@@ -14,6 +14,8 @@ from langgraph.checkpoint.sqlite import SqliteSaver
 import requests
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
+import sympy
+from sympy import sympify, SympifyError
 
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -40,26 +42,25 @@ llm = ChatMistralAI(
 search_tool = DuckDuckGoSearchRun(region="us-en")
 
 @tool
-def calculator(first_num: float, second_num: float, operation: str) -> dict:
+def calculator(expression: str) -> dict:
     """
-    Perform a basic operation on two numbers.
-    Supported operations: add, sub, mul, div
+    Evaluate a mathematical expression safely using symbolic math.
+    Supports: +, -, *, /, ** (power), sqrt(), sin(), cos(), tan(), log(),
+    exp(), factorial(), pi, e, and percentage-style expressions like '15% of 200'
+    (rewrite as '200 * 15/100' or '(15/100)*200').
+    Examples: "sqrt(8464)", "2**10", "log(100, 10)", "sin(pi/2)", "factorial(5)"
     """
     try:
-        if operation == 'add':
-            result = first_num + second_num
-        elif operation == 'sub':
-            result = first_num - second_num
-        elif operation == 'mul':
-            result = first_num * second_num
-        elif operation == 'div':
-            if second_num == 0:
-                return {"error": "division by zero can not be possible"}
-            result = first_num / second_num
-        else:
-            return {"error": "Unsupported operation"}
-
-        return {"first_num": first_num, "second_num": second_num, "operation": operation, "result": result}
+        result = sympify(expression, evaluate=True)
+        # Force numeric evaluation (so sqrt(16) -> 4.0 instead of staying symbolic as 4)
+        numeric_result = float(result.evalf())
+        return {
+            "expression": expression,
+            "result": numeric_result,
+            "exact_form": str(result)  # e.g. "4*sqrt(2)" before rounding, useful for irrational results
+        }
+    except (SympifyError, TypeError, ValueError) as e:
+        return {"error": f"Could not evaluate expression: {str(e)}"}
     except Exception as e:
         return {"error": str(e)}
 
@@ -162,7 +163,8 @@ researcher_agent = create_agent(
 math_agent = create_agent(
     llm,
     [calculator],
-    "You are a math specialist. Use the calculator tool for all mathematical operations. "
+    "You are a math specialist. Use the calculator tool by passing a single mathematical "
+    "expression string (e.g. 'sqrt(144)', '2**10', 'log(1000, 10)'). "
     "Always show your work and provide precise results."
 )
 
