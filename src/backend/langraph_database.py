@@ -16,6 +16,8 @@ from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 import sympy
 from sympy import sympify, SympifyError
+from langchain_core.messages import AIMessage
+from rag.rag_tool import get_rag_system
 
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -180,20 +182,18 @@ code_agent = create_agent(
 # RAG Specialist: Document Search
 def rag_agent_node(state: ChatState):
     """
-    RAG Specialist node. It uses the rag_search tool and returns the result directly 
-    to preserve formatting, citations, and sources.
+    RAG Specialist.
+    Calls the RAG pipeline directly and returns the answer.
     """
-    system_prompt = (
-        "You are a document analysis specialist. You MUST use the 'rag_search' tool "
-        "for ANY factual or technical question. Once you receive the tool output, "
-        "repeat it EXACTLY as your final response without adding or removing anything. "
-        "Do NOT summarize the tool output."
-    )
-    llm_with_tools = llm.bind_tools([rag_search])
-    processed_messages = filter_messages_for_mistral(state['messages'])
-    messages = [SystemMessage(content=system_prompt)] + processed_messages
-    response = llm_with_tools.invoke(messages)
-    return {"messages": [response]}
+    query = state["messages"][-1].content
+    rag = get_rag_system()
+    answer = rag.search(query)
+
+    return {
+        "messages": [
+            AIMessage(content=answer)
+        ]
+    }
 
 # General Chat: Conversational
 def general_chat_node(state: ChatState):
@@ -222,16 +222,88 @@ def supervisor_node(state: ChatState):
     """The supervisor node that manages routing between specialized agents."""
     workers = ["Researcher", "MathSpecialist", "CodeSpecialist", "RAGSpecialist", "GeneralChat"]
     system_prompt = (
-        "You are a supervisor managing a conversation between workers: {workers}. "
-        "Your job is to route the user's request to the appropriate worker. "
-        "\nSTRICT ROUTING RULES:\n"
-        "1. If a message starting with 'WORKER REPORT:' is present in the history, it means a worker has finished the task. "
-        "Read the report carefully and respond with 'FINISH' immediately.\n"
-        "2. If the user asks a technical or factual question about documents, call 'RAGSpecialist'.\n"
-        "3. If the user asks for complex logic, data analysis, or to write/run Python code, call 'CodeSpecialist'.\n"
-        "4. If the user asks for basic math, call 'MathSpecialist'.\n"
-        "5. Use 'GeneralChat' ONLY for basic greetings.\n"
-        "6. Respond with ONLY the name of the next worker or 'FINISH'."
+        "You are the Supervisor of a multi-agent AI system. "
+        "Your ONLY job is to decide which worker should handle the user's request. "
+        "Do NOT answer the user's question yourself. "
+        "Return ONLY one of these values:\n"
+        "- Researcher\n"
+        "- MathSpecialist\n"
+        "- CodeSpecialist\n"
+        "- RAGSpecialist\n"
+        "- GeneralChat\n"
+        "- FINISH\n\n"
+
+        "AVAILABLE WORKERS:\n\n"
+
+        "1. Researcher\n"
+        "- Handles internet searches and real-time information.\n"
+        "- Use for:\n"
+        "  • latest news\n"
+        "  • current events\n"
+        "  • today's information\n"
+        "  • recent updates\n"
+        "  • web search\n"
+        "  • Google-like queries\n"
+        "  • stock prices\n"
+        "  • weather\n"
+        "  • sports scores\n"
+        "  • information that changes over time\n"
+        "  • information NOT contained in uploaded documents\n\n"
+
+        "2. RAGSpecialist\n"
+        "- Answers ONLY using the uploaded document(s).\n"
+        "- Use when the user:\n"
+        "  • asks questions about the uploaded PDF\n"
+        "  • asks to summarize the document\n"
+        "  • asks to explain concepts from the document\n"
+        "  • asks questions whose answers should come ONLY from the uploaded document\n"
+        "  • asks 'according to the document', 'from the PDF', 'from my notes', etc.\n"
+        "- Never use RAGSpecialist for latest news or current information.\n\n"
+
+        "3. CodeSpecialist\n"
+        "- Handles programming and software engineering.\n"
+        "- Use for:\n"
+        "  • Python\n"
+        "  • C++\n"
+        "  • Java\n"
+        "  • debugging\n"
+        "  • algorithms\n"
+        "  • data structures\n"
+        "  • SQL\n"
+        "  • code generation\n"
+        "  • code explanation\n"
+        "  • data analysis\n"
+        "  • writing or executing Python code\n\n"
+
+        "4. MathSpecialist\n"
+        "- Handles mathematical problems.\n"
+        "- Use for:\n"
+        "  • arithmetic\n"
+        "  • algebra\n"
+        "  • calculus\n"
+        "  • probability\n"
+        "  • statistics\n"
+        "  • equations\n"
+        "  • symbolic mathematics\n\n"
+
+        "5. GeneralChat\n"
+        "- Handles ONLY casual conversation.\n"
+        "- Examples:\n"
+        "  • hello\n"
+        "  • hi\n"
+        "  • good morning\n"
+        "  • thank you\n"
+        "  • who are you\n"
+        "  • how are you\n\n"
+
+        "ROUTING RULES:\n"
+        "1. If the latest message starts with 'WORKER REPORT:', return FINISH immediately.\n"
+        "2. If the request requires current or internet information, choose Researcher.\n"
+        "3. If the request should be answered using uploaded documents, choose RAGSpecialist.\n"
+        "4. If the request is about programming, choose CodeSpecialist.\n"
+        "5. If the request is mathematical, choose MathSpecialist.\n"
+        "6. If it is only casual conversation, choose GeneralChat.\n"
+        "7. Return ONLY the worker name or FINISH. Never explain your decision."
     ).format(workers=", ".join(workers))
     
     processed_messages = filter_messages_for_mistral(state['messages'])
@@ -257,7 +329,7 @@ def supervisor_node(state: ChatState):
 
 research_tools = ToolNode([search_tool, get_stock_price])
 math_tools = ToolNode([calculator])
-rag_tools = ToolNode([rag_search])
+#rag_tools = ToolNode([rag_search])
 code_tools = ToolNode([python_interpreter])
 
 # --- GRAPH CONSTRUCTION ---
@@ -278,7 +350,7 @@ builder.add_node("RAGSpecialist", rag_agent_node)
 builder.add_node("GeneralChat", general_chat_node)
 builder.add_node("research_tools", research_tools)
 builder.add_node("math_tools", math_tools)
-builder.add_node("rag_tools", rag_tools)
+#builder.add_node("rag_tools", rag_tools)
 builder.add_node("code_tools", code_tools)
 
 # Define edges
@@ -302,16 +374,16 @@ builder.add_conditional_edges(
 builder.add_conditional_edges("Researcher", tools_condition, {"tools": "research_tools", "__end__": "Supervisor"})
 builder.add_conditional_edges("MathSpecialist", tools_condition, {"tools": "math_tools", "__end__": "Supervisor"})
 builder.add_conditional_edges("CodeSpecialist", tools_condition, {"tools": "code_tools", "__end__": "Supervisor"})
-builder.add_conditional_edges("RAGSpecialist", tools_condition, {"tools": "rag_tools", "__end__": "Supervisor"})
-
+#builder.add_conditional_edges("RAGSpecialist", tools_condition, {"tools": "rag_tools", "__end__": "Supervisor"})
 # GeneralChat is conversational, so it can go directly to END to prevent loops
 builder.add_edge("GeneralChat", END)
 
 # Tools return to their respective workers
 builder.add_edge("research_tools", "Researcher")
 builder.add_edge("math_tools", "MathSpecialist")
-builder.add_edge("rag_tools", "RAGSpecialist")
+#builder.add_edge("rag_tools", END)
 builder.add_edge("code_tools", "CodeSpecialist")
+builder.add_edge("RAGSpecialist", END)
 
 # Compile the workflow
 workflow = builder.compile(checkpointer=checkpointer)

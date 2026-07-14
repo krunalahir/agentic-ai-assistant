@@ -20,6 +20,11 @@ from langchain_core.messages import BaseMessage, HumanMessage
 from rag.rag_tool import get_rag_system, is_rag_ready, initialize_rag_from_saved
 import asyncio
 from dotenv import load_dotenv
+from langchain_core.messages import (
+    HumanMessage,
+    AIMessage,
+    ToolMessage,
+)
 
 # Load environment variables from config folder
 env_path = Path(__file__).parent.parent.parent / "config" / ".env"
@@ -97,8 +102,8 @@ async def get_all_threads():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/api/thread/{thread_id}", response_model=ConversationResponse)
-async def get_thread_messages(thread_id: str):
+#@app.get("/api/thread/{thread_id}", response_model=ConversationResponse)
+#async def get_thread_messages(thread_id: str):
     """Get messages for a specific thread"""
     try:
         messages = workflow.get_state(config={'configurable': {'thread_id': thread_id}}).values['messages']
@@ -113,6 +118,54 @@ async def get_thread_messages(thread_id: str):
             content = message.content if hasattr(message, 'content') else str(message)
             formatted_messages.append(Message(role=role, content=content))
         
+        return ConversationResponse(messages=formatted_messages)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+@app.get("/api/thread/{thread_id}", response_model=ConversationResponse)
+async def get_thread_messages(thread_id: str):
+
+    """Get only user-visible conversation."""
+    try:
+        state = workflow.get_state(
+            config={"configurable": {"thread_id": thread_id}}
+        )
+        messages = state.values.get("messages", [])
+
+        formatted_messages = []
+        for message in messages:
+            # User messages
+            if isinstance(message, HumanMessage):
+                # Hide internal worker reports
+                if message.content.startswith("WORKER REPORT:"):
+                    continue
+                formatted_messages.append(
+                    Message(
+                        role="user",
+                        content=message.content,
+                    )
+
+                )
+            # Assistant messages
+
+            elif isinstance(message, AIMessage):
+                # Ignore AI messages that only call tools
+                if getattr(message, "tool_calls", None):
+                    continue
+                if not message.content:
+                    continue
+                formatted_messages.append(
+                    Message(
+                        role="assistant",
+                        content=message.content,
+                    )
+                )
+
+            # Hide tool outputs
+            elif isinstance(message, ToolMessage):
+                continue
         return ConversationResponse(messages=formatted_messages)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -185,23 +185,34 @@ st.markdown("""
         letter-spacing: -0.5px;
     }
 
-    /* Input Field Styling */
-    [data-testid="stChatInput"] {
-        background: var(--bg-card) !important;
-        border: 1px solid var(--border-color) !important;
-        border-radius: 24px !important;
-        padding-left: 0.5rem;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-    }
-    [data-testid="stChatInput"] textarea {
-        color: var(--text-primary) !important;
-    }
-    [data-testid="stChatInput"] button {
-        background: var(--primary-gradient) !important;
-        color: white !important;
-        border-radius: 50% !important;
-    }
+/* Chat Input Container */
+[data-testid="stChatInput"] {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 24px !important;
+    padding-left: 0.5rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+/* Text Area */
+[data-testid="stChatInput"] textarea {
+    background: transparent !important;
+    color: #000000 !important;      /* <-- Black text */
+    caret-color: #000000 !important;
+}
+
+/* Placeholder */
+[data-testid="stChatInput"] textarea::placeholder {
+    color: #6b7280 !important;
+}
+
+/* Send Button */
+[data-testid="stChatInput"] button {
+    background: var(--primary-gradient) !important;
+    color: white !important;
+    border-radius: 50% !important;
+}
 
     /* Status Badges */
     .status-badge {
