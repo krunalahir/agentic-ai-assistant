@@ -16,7 +16,6 @@ from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 import sympy
 from sympy import sympify, SympifyError
-from langchain_core.messages import AIMessage
 from rag.rag_tool import get_rag_system
 
 # Add parent directory to path for imports
@@ -325,14 +324,12 @@ def supervisor_node(state: ChatState):
     
     return {"next": next_node}
 
-# --- TOOL NODES ---
 
 research_tools = ToolNode([search_tool, get_stock_price])
 math_tools = ToolNode([calculator])
 #rag_tools = ToolNode([rag_search])
 code_tools = ToolNode([python_interpreter])
 
-# --- GRAPH CONSTRUCTION ---
 
 # Connect to database in data folder
 db_path = Path(__file__).parent.parent.parent / "data" / "chat.db"

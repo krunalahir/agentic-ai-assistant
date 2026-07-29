@@ -102,28 +102,6 @@ async def get_all_threads():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-#@app.get("/api/thread/{thread_id}", response_model=ConversationResponse)
-#async def get_thread_messages(thread_id: str):
-    """Get messages for a specific thread"""
-    try:
-        messages = workflow.get_state(config={'configurable': {'thread_id': thread_id}}).values['messages']
-        formatted_messages = []
-        
-        for message in messages:
-            if isinstance(message, HumanMessage):
-                role = 'user'
-            else:
-                role = 'assistant'
-            
-            content = message.content if hasattr(message, 'content') else str(message)
-            formatted_messages.append(Message(role=role, content=content))
-        
-        return ConversationResponse(messages=formatted_messages)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-
 @app.get("/api/thread/{thread_id}", response_model=ConversationResponse)
 async def get_thread_messages(thread_id: str):
 

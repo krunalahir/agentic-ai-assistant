@@ -86,6 +86,37 @@
 └── 📂 .venv/                             # 🐍 Python Virtual Environment
 ```
 
+
+##    Architecture
+
+                         START
+                           │
+                           ▼
+                     ┌────────────┐
+                     │ Supervisor │
+                     └─────┬──────┘
+                           │
+          ┌────────┬───────┼─────────┬─────────┐
+          ▼        ▼       ▼         ▼         ▼
+      Research    Math     Code      RAG     General
+        │          │        │         │         │
+        │          │        │         │         ▼
+        │          │        │         └──────► END
+        │          │        │
+        ▼          ▼        ▼
+    Research    Math     Code
+     ToolNode   ToolNode ToolNode
+        │          │        │
+        └──────────┴────────┘
+               │
+               ▼
+         Back to Agent
+               │
+               ▼
+          Supervisor
+               │
+               ▼
+              END
 ---
 
 ## 📊 Component Overview

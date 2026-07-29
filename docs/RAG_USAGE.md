@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Custom RAG (Retrieval-Augmented Generation) search tool has been added to your LangGraph chatbot. It allows the chatbot to answer questions based on your custom PDF documents.
+The Custom RAG (Retrieval-Augmented Generation) search tool has been part of the LangGraph chatbot. It allows the chatbot to answer questions based on your custom PDF documents.
 
 ## Setup Instructions
 
