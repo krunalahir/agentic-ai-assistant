@@ -45,7 +45,6 @@ The **Agentic AI Assistant** is an intelligent conversational AI system that goe
    - RAG Specialist: Document analysis & semantic search
    - Researcher: Web search & real-time stock data
    - Math Specialist: Basic arithmetic operations
-   - Code Specialist: Python execution & algorithmic logic ← NEW 🚀
         ↓
 5. The Worker Node processes the request (often via a multi-turn reasoning loop)
         ↓
@@ -56,15 +55,17 @@ The **Agentic AI Assistant** is an intelligent conversational AI system that goe
 8. Final response with citations and formatting is delivered to the user
 ```
 
-### 🧠 Agentic Reasoning Loop (Example: Code Specialist)
+### 🧠 Agentic Reasoning Loop (Example: Document Q&A)
 
-This project implements a sophisticated **Agentic Loop** that demonstrates true autonomous reasoning. When you ask a complex technical or logical question:
+This project implements a sophisticated **Agentic Loop** that demonstrates true autonomous reasoning. When you ask a question about an uploaded document:
 
-1.  **Supervisor Node**: Analyzes the query and identifies it requires code execution. It delegates the task to the **CodeSpecialist**.
-2.  **CodeSpecialist Node**: Acts as a Senior Developer. It writes a complete, logical Python script to solve the problem.
-3.  **Tool Node (Python REPL)**: Executes the generated script in a sandboxed environment and captures the real-world output.
-4.  **CodeSpecialist Node (Verification)**: Receives the output. If the code failed, it debugs and retries. If it succeeded, it formats the result for the user.
-5.  **Supervisor Node (Final Review)**: Confirms the specialist has completed the task and delivers the final answer.
+1.  **Supervisor Node**: Analyzes the query and identifies it as a document question. It delegates the task to the **RAGSpecialist**.
+2.  **RAG Agent (Query Analysis)**: Chooses a retrieval strategy (vector, keyword, or hybrid) for the question.
+3.  **Retrieval & Re-ranking**: Finds candidate chunks with FAISS + BM25, then re-ranks them with a cross-encoder.
+4.  **Self-Correction**: The agent evaluates whether the retrieved context is relevant. If not, it rewrites the query and retries.
+5.  **Cited Answer**: The final answer is generated with `[ID]` citations, and the cited source passages are attached.
+
+> **Security note:** the previous experimental Python code-execution tool was removed because it ran model-generated code without a sandbox.
 
 ### Key Technologies
 
@@ -287,7 +288,6 @@ ALPHA_VANTAGE_API_KEY=your_alpha_vantage_key_here
 | Feature | Description | Example |
 |---------|-------------|---------|
 | 📄 **Document Q&A** | High-precision RAG with self-correction and re-ranking | "What are the core risks listed in the PDF?" |
-| 💻 **Code Specialist** | **Agentic execution** of Python scripts for data & logic | "Graph the Fibonacci sequence up to 10" |
 | 🌐 **Web Search** | Real-time internet browsing for latest facts | "Search for latest AI breakthroughs" |
 | 📈 **Stock Prices** | Live financial data fetching via API | "Get AAPL, TSLA stock prices" |
 | 🧮 **Calculator** | Specialized worker for precise arithmetic | "Calculate 125 × 47 + 300" |
@@ -571,4 +571,3 @@ For issues, questions, or contributions, please refer to the project documentati
 ---
 
 **Built with ❤️ using LangGraph, FastAPI, and Streamlit**
-
