@@ -78,26 +78,6 @@ def get_stock_price(symbol: str) -> dict:
     r = requests.get(url)
     return r.json()
 
-@tool
-def python_interpreter(code: str) -> dict:
-    """
-    Execute python code in a local environment.
-    Use this for complex math, data analysis, or algorithmic problems.
-    The code should print the final result.
-    """
-    import sys
-    from io import StringIO
-    import contextlib
-
-    stdout = StringIO()
-    try:
-        with contextlib.redirect_stdout(stdout):
-            exec(code, {"__builtins__": __builtins__}, {})
-        result = stdout.getvalue()
-        return {"result": result if result else "Code executed successfully (no output)."}
-    except Exception as e:
-        return {"error": str(e)}
-
 # --- MISTRAL MESSAGE HELPER ---
 
 from langchain_core.messages import ToolMessage, AIMessage
@@ -169,15 +149,6 @@ math_agent = create_agent(
     "Always show your work and provide precise results."
 )
 
-# Code Specialist: Python Interpreter
-code_agent = create_agent(
-    llm,
-    [python_interpreter],
-    "You are a senior python developer and data scientist. "
-    "Use the 'python_interpreter' tool to solve complex algorithmic problems, data analysis, "
-    "or simulations. Always write clean, efficient code and explain your approach."
-)
-
 # RAG Specialist: Document Search
 def rag_agent_node(state: ChatState):
     """
@@ -213,13 +184,13 @@ def general_chat_node(state: ChatState):
 
 class Router(BaseModel):
     """Router logic for the supervisor."""
-    next: Literal["Researcher", "MathSpecialist", "CodeSpecialist", "RAGSpecialist", "GeneralChat", "FINISH"] = Field(
+    next: Literal["Researcher", "MathSpecialist", "RAGSpecialist", "GeneralChat", "FINISH"] = Field(
         description="The next worker to call or FINISH if the task is complete."
     )
 
 def supervisor_node(state: ChatState):
     """The supervisor node that manages routing between specialized agents."""
-    workers = ["Researcher", "MathSpecialist", "CodeSpecialist", "RAGSpecialist", "GeneralChat"]
+    workers = ["Researcher", "MathSpecialist", "RAGSpecialist", "GeneralChat"]
     system_prompt = (
         "You are the Supervisor of a multi-agent AI system. "
         "Your ONLY job is to decide which worker should handle the user's request. "
@@ -227,7 +198,6 @@ def supervisor_node(state: ChatState):
         "Return ONLY one of these values:\n"
         "- Researcher\n"
         "- MathSpecialist\n"
-        "- CodeSpecialist\n"
         "- RAGSpecialist\n"
         "- GeneralChat\n"
         "- FINISH\n\n"
@@ -259,22 +229,7 @@ def supervisor_node(state: ChatState):
         "  • asks 'according to the document', 'from the PDF', 'from my notes', etc.\n"
         "- Never use RAGSpecialist for latest news or current information.\n\n"
 
-        "3. CodeSpecialist\n"
-        "- Handles programming and software engineering.\n"
-        "- Use for:\n"
-        "  • Python\n"
-        "  • C++\n"
-        "  • Java\n"
-        "  • debugging\n"
-        "  • algorithms\n"
-        "  • data structures\n"
-        "  • SQL\n"
-        "  • code generation\n"
-        "  • code explanation\n"
-        "  • data analysis\n"
-        "  • writing or executing Python code\n\n"
-
-        "4. MathSpecialist\n"
+        "3. MathSpecialist\n"
         "- Handles mathematical problems.\n"
         "- Use for:\n"
         "  • arithmetic\n"
@@ -285,7 +240,7 @@ def supervisor_node(state: ChatState):
         "  • equations\n"
         "  • symbolic mathematics\n\n"
 
-        "5. GeneralChat\n"
+        "4. GeneralChat\n"
         "- Handles ONLY casual conversation.\n"
         "- Examples:\n"
         "  • hello\n"
@@ -299,10 +254,9 @@ def supervisor_node(state: ChatState):
         "1. If the latest message starts with 'WORKER REPORT:', return FINISH immediately.\n"
         "2. If the request requires current or internet information, choose Researcher.\n"
         "3. If the request should be answered using uploaded documents, choose RAGSpecialist.\n"
-        "4. If the request is about programming, choose CodeSpecialist.\n"
-        "5. If the request is mathematical, choose MathSpecialist.\n"
-        "6. If it is only casual conversation, choose GeneralChat.\n"
-        "7. Return ONLY the worker name or FINISH. Never explain your decision."
+        "4. If the request is mathematical, choose MathSpecialist.\n"
+        "5. If it is only casual conversation, choose GeneralChat.\n"
+        "6. Return ONLY the worker name or FINISH. Never explain your decision."
     ).format(workers=", ".join(workers))
     
     processed_messages = filter_messages_for_mistral(state['messages'])
@@ -328,7 +282,6 @@ def supervisor_node(state: ChatState):
 research_tools = ToolNode([search_tool, get_stock_price])
 math_tools = ToolNode([calculator])
 #rag_tools = ToolNode([rag_search])
-code_tools = ToolNode([python_interpreter])
 
 
 # Connect to database in data folder
@@ -342,13 +295,11 @@ builder = StateGraph(ChatState)
 builder.add_node("Supervisor", supervisor_node)
 builder.add_node("Researcher", researcher_agent)
 builder.add_node("MathSpecialist", math_agent)
-builder.add_node("CodeSpecialist", code_agent)
 builder.add_node("RAGSpecialist", rag_agent_node)
 builder.add_node("GeneralChat", general_chat_node)
 builder.add_node("research_tools", research_tools)
 builder.add_node("math_tools", math_tools)
 #builder.add_node("rag_tools", rag_tools)
-builder.add_node("code_tools", code_tools)
 
 # Define edges
 builder.add_edge(START, "Supervisor")
@@ -360,7 +311,6 @@ builder.add_conditional_edges(
     {
         "Researcher": "Researcher",
         "MathSpecialist": "MathSpecialist",
-        "CodeSpecialist": "CodeSpecialist",
         "RAGSpecialist": "RAGSpecialist",
         "GeneralChat": "GeneralChat",
         "FINISH": END,
@@ -370,7 +320,6 @@ builder.add_conditional_edges(
 # Worker -> ToolNode connection
 builder.add_conditional_edges("Researcher", tools_condition, {"tools": "research_tools", "__end__": "Supervisor"})
 builder.add_conditional_edges("MathSpecialist", tools_condition, {"tools": "math_tools", "__end__": "Supervisor"})
-builder.add_conditional_edges("CodeSpecialist", tools_condition, {"tools": "code_tools", "__end__": "Supervisor"})
 #builder.add_conditional_edges("RAGSpecialist", tools_condition, {"tools": "rag_tools", "__end__": "Supervisor"})
 # GeneralChat is conversational, so it can go directly to END to prevent loops
 builder.add_edge("GeneralChat", END)
@@ -379,7 +328,6 @@ builder.add_edge("GeneralChat", END)
 builder.add_edge("research_tools", "Researcher")
 builder.add_edge("math_tools", "MathSpecialist")
 #builder.add_edge("rag_tools", END)
-builder.add_edge("code_tools", "CodeSpecialist")
 builder.add_edge("RAGSpecialist", END)
 
 # Compile the workflow
